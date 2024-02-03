@@ -35,11 +35,12 @@ export const captureAndSendImage = async (backendIp: string): Promise<any[]> => 
           context.drawImage(videoElement, 0, 0);
 
           // Get the image data from the canvas as PNG
-          const imageData = canvas.toDataURL('image/png');
+          const url = canvas.toDataURL()
+          const file = dataURItoBlob(url)
           mediaStream.getTracks().forEach((track) => track.stop());
 
           // Send the captured image to the backend server
-          sendImageToBackend(imageData, backendIp)
+          sendImageToBackend(file, backendIp)
             .then((result) => {
               resolve(result);
             })
@@ -57,15 +58,44 @@ export const captureAndSendImage = async (backendIp: string): Promise<any[]> => 
   }
 };
 
+const dataURItoBlob = function(dataURI : string) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString : string;
+  if (dataURI.split(',')[0].indexOf('base64') >= 0)
+      byteString = atob(dataURI.split(',')[1]);
+  else
+      byteString = unescape(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([ia], {type:mimeString});
+}
+
 // Send the captured image to the backend server
-const sendImageToBackend = async (imageData: string, backendIp: string): Promise<any> => {
-  const response = await fetch(backendIp + '/scan', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ image: btoa(imageData) }),
-  });
-  return await response.json();
+const sendImageToBackend = async (imageFile: Blob, backendIp: string): Promise<any> => {
+  try {
+    const form = new FormData()
+    form.append('file', imageFile)
+
+    // Make the fetch request with FormData
+    const response = await fetch(backendIp + '/scan', {
+      method: 'POST',
+      body: form,
+    });
+
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error(`Error uploading image: ${response.statusText}`);
+    }
+  } catch (error) {
+    throw error;
+  }
 };
 
