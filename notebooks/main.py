@@ -18,13 +18,13 @@ def get_fingers (image_source, model_source):
 
     fingers = []
 
-    for i, hands in enumerate(hand_landmarks[0]):
+    for i, hands in enumerate(hand_landmarks):
 
         fingers.append({
             'fingers_up': top_gesture[i][0].category_name,
             'confidence': top_gesture[i][0].score,
-            'x': hands[0].x * image[0].width,
-            'y': image[0].height - (hands[0].y * image[0].height)
+            'x': hands[0].x * image.width,
+            'y': image.height - (hands[0].y * image.height)
         })
     
     return fingers
@@ -34,4 +34,4 @@ image_file_name = 'IMG_1747 Medium.jpeg'
 
 model_file = 'gesture_recognizer-7.task'
 
-get_fingers(image_file_name, model_file)
+print(get_fingers(image_file_name, model_file))
