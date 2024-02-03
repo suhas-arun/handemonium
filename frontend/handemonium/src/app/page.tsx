@@ -1,5 +1,6 @@
 import HomePage from "@/pages/HomePage";
 
 export default function Home() {
-  return HomePage();
+  const logoPath: string = "https://handemonium.com/logo.svg";
+  return HomePage({ logoPath });
 }
