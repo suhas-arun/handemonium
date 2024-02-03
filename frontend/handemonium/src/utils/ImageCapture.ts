@@ -94,6 +94,10 @@ const sendImageToBackend = async (imageFile: Blob, backendIp: string): Promise<a
     if (!response.ok) {
       throw new Error(`Error uploading image: ${response.statusText}`);
     }
+
+    // Print response
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
   } catch (error) {
     throw error;
   }
