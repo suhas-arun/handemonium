@@ -1,12 +1,11 @@
 import asyncio
 import os
-from fastapi import FastAPI, File, UploadFile
+import io
+from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from typing import List
-import base64
-from io import BytesIO
 from PIL import Image
 
 app = FastAPI()
@@ -36,14 +35,14 @@ async def get_next_filename() -> str:
     global file_counter
     async with file_counter_lock:
         file_counter += 1
-        return f"file_{file_counter}.jpg"
+        return f"file_{file_counter}.png"
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 @app.post("/scan")
-async def receive_image(data: dict):
+async def receive_image(file: UploadFile = File(...)):
     try:
         # Generate a unique filename
         print("Received image data")
@@ -53,17 +52,10 @@ async def receive_image(data: dict):
 
         print(f"Saving to {path_to_file}")
 
-        image_data = data.get("image", "")
-        image_bytes = base64.b64decode(image_data)
+        request_object_content = await file.read()
+        img = Image.open(io.BytesIO(request_object_content))
 
-        image = Image.open(BytesIO(image_bytes))
-
-        # Save the image in JPG format
-        image.save(f"{files_path}/{filename}.jpg", "JPEG")
-
-        # Save the received image locally
-        # with open(path_to_file, "wb") as buffer:
-        #     buffer.write(image_stream.read())
+        img.save(path_to_file, "PNG")
 
         # Perform image analysis
         result = perform_analysis(path_to_file)
