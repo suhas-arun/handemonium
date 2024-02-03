@@ -2,12 +2,13 @@ import React from "react";
 import Button from "../components/Button";
 
 function HomePage() {
+  const logoPath = "/handemonium-logo.png";
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
-      <h1 className="text-7xl font-bold mb-10">Handemonium</h1>
-      <div className="flex gap-4">
+    <div className="h-screen flex flex-col items-center justify-center bg-white text-white">
+      <img src={logoPath} alt="Handemonium Logo" className="max-w-96" />
+      <div className="flex gap-4 mt-8">
         <Button label="PLAY" />
-        <Button label="SETTINGS" className="bg-gray-700 hover:bg-gray-800" />
+        <Button label="SETTINGS" />
       </div>
     </div>
   );
