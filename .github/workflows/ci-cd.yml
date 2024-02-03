@@ -2,8 +2,8 @@ name: CI/CD
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,24 +21,3 @@ jobs:
 
     - name: Build and push backend image
       run: docker build -t benjames9/handemonium-frontend:latest ./frontend/handemonium && docker push benjames9/handemonium-frontend:latest
-
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: Configure SSH and pull backend container
-  #     uses: appleboy/ssh-action@v1.0.3
-  #     with:
-  #       host: ${{ secrets.SSH_BACKEND_HOST }}
-  #       username: ${{ secrets.SSH_BACKEND_USER }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       proxy_host: ${{ secrets.SHELL_SSH_HOST }}
-  #       proxy_username: ${{ secrets.SHELL_SSH_USERNAME }}
-  #       proxy_key: ${{ secrets.SHELL_SSH_PRIVATE_KEY }}
-  #       timeout: 5m
-  #       proxy_timeout: 5m
-  #       script: |
-  #         cd ~
-  #         docker-compose pull
-  #         docker-compose up -d
