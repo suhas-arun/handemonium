@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from typing import List
 import base64
 from io import BytesIO
+from PIL import Image
 
 app = FastAPI()
 
@@ -23,6 +24,9 @@ app.add_middleware(
 file_counter = 0
 file_counter_lock = asyncio.Lock()
 files_path = "../uploads"
+
+# Ensure the target directory exists
+os.makedirs(files_path, exist_ok=True)
 
 def perform_analysis(image_path: str) -> List[dict]:
     # TODO
@@ -52,11 +56,14 @@ async def receive_image(data: dict):
         image_data = data.get("image", "")
         image_bytes = base64.b64decode(image_data)
 
-        image_stream = BytesIO(image_bytes)
+        image = Image.open(BytesIO(image_bytes))
+
+        # Save the image in JPG format
+        image.save(f"{files_path}/{filename}.jpg", "JPEG")
 
         # Save the received image locally
-        with open(path_to_file, "wb") as buffer:
-            buffer.write(image_stream.read())
+        # with open(path_to_file, "wb") as buffer:
+        #     buffer.write(image_stream.read())
 
         # Perform image analysis
         result = perform_analysis(path_to_file)
