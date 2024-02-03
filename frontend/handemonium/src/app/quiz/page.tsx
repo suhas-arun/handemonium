@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import QuestionScreen1 from "../components/QuestionScreen1";
+import QuestionScreen1 from "../../components/QuestionScreen1";
 import { questions } from "@/questions";
 
 interface QuizPageProps {}
@@ -16,6 +17,7 @@ const QuizPage: React.FC<QuizPageProps> = () => {
   const [questionIndex, setQuestionIndex] = useState<number>(0);
 
   const goToQuestionScreen2 = () => {
+    console.log("DONE");
     setCurrentScreen("question2");
   };
 
