@@ -58,14 +58,14 @@ export const captureAndSendImage = async (backendIp: string): Promise<any[]> => 
 };
 
 // Send the captured image to the backend server
-const sendImageToBackend = (imageData: string, backendIp: string): Promise<any> => {
-  return fetch(backendIp + '/scan', {
+const sendImageToBackend = async (imageData: string, backendIp: string): Promise<any> => {
+  const response = await fetch(backendIp + '/scan', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ image: imageData }),
-  })
-    .then((response) => response.json());
+    body: JSON.stringify({ image: btoa(imageData) }),
+  });
+  return await response.json();
 };
 
