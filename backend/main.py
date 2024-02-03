@@ -61,7 +61,7 @@ async def receive_image(file: UploadFile = File(...)):
         result = perform_analysis(path_to_file)
 
         # Delete the file after analysis
-        # os.remove(path_to_file)
+        os.remove(path_to_file)
 
         # Return the result as JSON
         return JSONResponse(content=result)
