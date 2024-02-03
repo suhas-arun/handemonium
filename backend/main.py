@@ -1,4 +1,5 @@
 import asyncio
+import os
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,7 +37,7 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/scan")
-async def analyze_image_endpoint(file: UploadFile = File(...)):
+async def receive_image(file: UploadFile = File(...)):
     try:
         # Generate a unique filename
         filename = await get_next_filename()
@@ -48,6 +49,9 @@ async def analyze_image_endpoint(file: UploadFile = File(...)):
 
         # Perform image analysis
         result = perform_analysis(path_to_file)
+
+        # Delete the file after analysis
+        os.remove(path_to_file)
 
         # Return the result as JSON
         return JSONResponse(content=result)
