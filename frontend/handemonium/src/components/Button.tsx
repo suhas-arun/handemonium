@@ -1,14 +1,17 @@
+"use client";
 import React from "react";
 
 interface ButtonProps {
   label: string;
   className?: string;
+  redirectUrl?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, className = "" }) => {
+const Button: React.FC<ButtonProps> = ({ label, className = "", redirectUrl = "" }) => {
   return (
     <button
       className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${className}`}
+      onClick={() => {window.location.href = redirectUrl;}}
     >
       {label}
     </button>
