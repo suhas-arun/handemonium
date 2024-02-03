@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "HTTPS=true SSL_CRT_FILE=./146.169.40.85.pem SSL_KEY_FILE=146.169.40.85-key.pem next start",
     "lint": "next lint"
   },
   "dependencies": {
