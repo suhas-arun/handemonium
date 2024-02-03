@@ -1,8 +1,11 @@
 import React from "react";
 import Button from "../components/Button";
 
-function HomePage() {
-  const logoPath = "/handemonium-logo.png";
+interface Props {
+  logoPath: string;
+}
+
+const HomePage: React.FC<Props> = ({ logoPath }) => {
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-white text-white">
       <img src={logoPath} alt="Handemonium Logo" className="max-w-96" />
@@ -12,6 +15,6 @@ function HomePage() {
       </div>
     </div>
   );
-}
+};
 
 export default HomePage;
