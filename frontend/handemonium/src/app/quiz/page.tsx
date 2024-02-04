@@ -6,7 +6,7 @@ import { getCorrectAnswer, questions } from "@/questions";
 import AnswerScreen from "@/components/AnswerScreen";
 import Leaderboard from "@/components/Leaderboard";
 import FinalScreen from "@/components/FinalScreen";
-import { getLeaderboard } from "../../GameState";
+import GameState from "../../GameState";
 
 interface QuizPageProps {}
 
@@ -15,11 +15,14 @@ interface QuizPageState {
   questionIndex: number;
 }
 
+
 const QuizPage: React.FC<QuizPageProps> = () => {
   const [currentScreen, setCurrentScreen] = useState<
     "question1" | "question2" | "answer" | "leaderboard" | "final"
   >("question1");
   const [questionIndex, setQuestionIndex] = useState<number>(0);
+  const [gameState, setGameState] = useState(new GameState());
+
 
   const goToQuestionScreen2 = () => {
     setCurrentScreen("question2");
@@ -64,13 +67,14 @@ const QuizPage: React.FC<QuizPageProps> = () => {
         <AnswerScreen
           answer={getCorrectAnswer(questions[questionIndex])!}
           onTimerEnd={goToLeaderboard}
+          gameState={gameState}
         />
       )}
       {currentScreen === "leaderboard" && (
-        <Leaderboard leaderboard={getLeaderboard()} onTimerEnd={nextQuestion} />
+        <Leaderboard leaderboard={gameState.getLeaderboard()} onTimerEnd={nextQuestion} />
       )}
       {currentScreen === "final" && (
-        <FinalScreen leaderboard={getLeaderboard()} />
+        <FinalScreen leaderboard={gameState.getLeaderboard()} />
       )}
     </div>
   );

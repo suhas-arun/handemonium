@@ -1,30 +1,31 @@
 import { useState, useEffect } from "react";
 import LoadingIcon from "./LoadingIcon";
 import { captureAndSendImage } from "@/utils/ImageCapture";
-import { updateScore } from "@/GameState";
+import GameState from "@/GameState";
 
 interface AnswerScreenProps {
   answer: [string, number];
   onTimerEnd: () => void;
+  gameState: GameState;
 }
 
-const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
+const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd, gameState }) => {
   const [countdown, setCountdown] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const data = await captureAndSendImage("http://localhost:8000");
-        console.log(data);
-        setData(data);
+        const response = await captureAndSendImage("http://localhost:8000");
+        console.log(response);
+        for (const user in response) {
+          if (parseInt(response[user]) === answer[1] + 1) {
+            gameState.updateScore(user);
+          }
+        }
         setIsLoading(false);
       } catch (error) {
         console.error(error);
-      }
-      for (const user in data) {
-        updateScore(user, data[user]);
       }
       const timer = setInterval(() => {
         setCountdown((prevCountdown) => {

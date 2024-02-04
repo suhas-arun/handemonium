@@ -1,36 +1,23 @@
-import { useState } from "react";
-
 interface User {
   name: string;
   score: number;
 }
 
-const initialState: User[] = [
-  { name: "Alex", score: 0 },
-  { name: "Ben", score: 0 },
-  { name: "Sid", score: 0 },
-  { name: "Suhas", score: 0 },
-  { name: "Viyan", score: 0 },
-];
+export default class GameState {
+  private users: Map<string, number>;
 
-const [users, setUsers] = useState<User[]>(initialState);
+  constructor() {
+    this.users = new Map<string, number>([["Suhas", 0], ["Ben", 0], ["Alex", 0], ["Rushil", 0], ["Sid", 0], ["Viyan", 0]]);
+  }
 
-export const getLeaderboard = (): User[] => {
-  return [...users].sort((a, b) => b.score - a.score);
-};
+  getLeaderboard(): [string, number][] {
+    return Array.from(this.users.entries()).sort((a, b) => b[1] - a[1]);
+  }
 
-export const updateScore = (name: string, score: number): void => {
-  setUsers(users => {
-    const index = users.findIndex(user => user.name === name);
-    if (index === -1) {
-      return users;
+  updateScore(name: string): void {
+    if (this.users.has(name)) {
+      const currentScore = this.users.get(name);
+      this.users.set(name, currentScore! + 1);
     }
-
-    const updatedUser = { ...users[index], score: users[index].score + score };
-    return [
-      ...users.slice(0, index),
-      updatedUser,
-      ...users.slice(index + 1),
-    ];
-  })
-};
+  }
+}
