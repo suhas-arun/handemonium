@@ -1,15 +1,13 @@
 from PIL import Image
 import face_recognition
 import sys
-import math
-from operator import itemgetter
 
 # Load the jpg file into a numpy array
 def face_reg(image_path):
     image = face_recognition.load_image_file(image_path)
     face_locations = face_recognition.face_locations(image)
     sorted_face_locations = sorted(face_locations, key=lambda x: x[1] - x[3])
-    names = ['Suhas','Ben','Viyan Raj']
+    names = ['Ben']
     faces = {}
     for i, face_location in enumerate(sorted_face_locations):
         top, right, bottom, left = face_location

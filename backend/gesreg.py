@@ -2,7 +2,6 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-
 def get_fingers (image_source, model_source):
 
     base_options = python.BaseOptions(model_asset_path=model_source)
