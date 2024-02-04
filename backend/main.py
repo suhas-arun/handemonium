@@ -5,8 +5,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
-from typing import List
-from facereg import face_reg
+from facereg import face_to_name
 from facereg import nearest_hand
 from gesreg import get_fingers
 
@@ -26,11 +25,10 @@ file_counter = 0
 file_counter_lock = asyncio.Lock()
 files_path = "../uploads"
 
-def perform_analysis(image_path: str, model_source: str) -> List[dict]:
+def perform_analysis(image_path: str, model_source: str):
     guesses = {}
-    faces = face_reg(image_path)
+    faces = face_to_name(image_path)
     fingers = get_fingers(image_path, model_source)
-    print(faces)
     for name, face_coords in faces.items():
         answer = nearest_hand(face_coords[0], face_coords[1], fingers)
         guesses[name] = answer
@@ -44,7 +42,7 @@ async def get_next_filename() -> str:
 
 @app.get("/")
 def read_root():
-    print(perform_analysis("Upload/Test2.jpeg", "Models/gesture_recognizer-7.task"))
+    print(perform_analysis("Upload/Test3.jpeg", "Models/gesture_recognizer-7.task"))
     return {"Hello": "World"}
 
 @app.post("/scan")
