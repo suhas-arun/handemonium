@@ -14,9 +14,7 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await captureAndSendImage("http://localhost:8000");
-        console.log(response);
-        const data = await response.json();
+        const data = await captureAndSendImage("http://localhost:8000");
         console.log(data);
         setData(data);
         setIsLoading(false);

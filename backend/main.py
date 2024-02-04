@@ -65,11 +65,17 @@ async def receive_image(file: UploadFile = File(...)):
 
         img.save(path_to_file, "PNG")
 
+        print(f"Saved to {path_to_file}")
+
         # Perform image analysis
         result = perform_analysis(path_to_file, "Models/gesture_recognizer-7.task")
 
+        print(f"Performed analysis")
+
         # Delete the file after analysis
         os.remove(path_to_file)
+
+        print(f"Removed file")
 
         # Return the result as JSON
         return JSONResponse(content=result)
