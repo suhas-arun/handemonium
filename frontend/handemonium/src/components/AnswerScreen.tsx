@@ -45,6 +45,7 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd, gameSta
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
+      {isLoading && <h2 className="text-2xl font-bold mb-10">Keep your hands up!</h2>}
       <h1 className="text-6xl font-bold mb-8">The correct answer was:</h1>
       {!isLoading && (
         <div className="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 h-32 mt-8">
