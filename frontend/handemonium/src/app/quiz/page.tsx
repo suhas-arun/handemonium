@@ -5,6 +5,7 @@ import QuestionScreen2 from "@/components/QuestionScreen2";
 import { getCorrectAnswer, questions } from "@/questions";
 import AnswerScreen from "@/components/AnswerScreen";
 import Leaderboard from "@/components/Leaderboard";
+import FinalScreen from "@/components/FinalScreen";
 
 interface QuizPageProps {}
 
@@ -76,6 +77,9 @@ const QuizPage: React.FC<QuizPageProps> = () => {
       )}
       {currentScreen === "leaderboard" && (
         <Leaderboard leaderboard={getLeaderboard()} onTimerEnd={nextQuestion} />
+      )}
+      {currentScreen === "final" && (
+        <FinalScreen leaderboard={getLeaderboard()} />
       )}
     </div>
   );
