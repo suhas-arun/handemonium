@@ -24,7 +24,7 @@ def get_fingers (image_source, model_source):
             'fingers_up': top_gesture[i][0].category_name,
             'confidence': top_gesture[i][0].score,
             'x': hands[0].x * image.width,
-            'y': image.height - (hands[0].y * image.height)
+            'y': hands[0].y * image.height
         })
     
     return fingers

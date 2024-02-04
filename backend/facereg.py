@@ -2,27 +2,30 @@ from PIL import Image
 import face_recognition
 import sys
 import math
+from operator import itemgetter
 
 # Load the jpg file into a numpy array
 def face_reg(image_path):
     image = face_recognition.load_image_file(image_path)
     face_locations = face_recognition.face_locations(image)
-    names = ['Alex Timms','Sid','Viyan Raj']
+    sorted_face_locations = sorted(face_locations, key=lambda x: x[1] - x[3])
+    names = ['Suhas','Ben','Viyan Raj']
     faces = {}
-    i = 0
-    for face_location in face_locations:
-        # Print the location of each face in this image
+    for i, face_location in enumerate(sorted_face_locations):
         top, right, bottom, left = face_location
-        avg = (top+right+bottom+left)/4
-        faces[avg] = names[i]
-        i=+1
+        y = (top+bottom)/2
+        x = (right+left)/2
+        faces[names[i]] = (x, y)
+    print(faces)
     return faces
-def nearest_face(handx,faces):
-    min = sys.float_info.max
-    face = None
-    for key in faces:
-        if abs(handx-key) < min:
-            min = abs(handx-key)
-            face = key
-    return face
+
     
+def nearest_hand(facex, facey, hands):
+    min_dist = sys.float_info.max
+    nearest_answer = None
+    for hand in hands:
+        euclidean = ((facex-hand['x'])**2+(facey-hand['y'])**2)**0.5
+        if euclidean < min_dist:
+            min_dist = euclidean
+            nearest_answer = hand['fingers_up']
+    return nearest_answer
