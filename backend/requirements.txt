@@ -7,3 +7,4 @@ mediapipe==0.10.0
 pandas==2.1.4
 pillow>=10.1
 python-multipart
+mediapipe==0.10.0
