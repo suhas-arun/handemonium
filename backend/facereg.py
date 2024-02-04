@@ -21,17 +21,27 @@ def face_to_name(image_path):
 
     for face in face_locations:
         top, right, bottom, left = face
-        face_image = unknown_image[top:bottom, left:right]
 
-        y = (top+bottom)/2
+        face_image = unknown_image[int(0.8*top):int(1.2*bottom), int(0.8*left):int(1.2*right)]
+
         x = (right+left)/2
+        y = (top+bottom)/2
+
+        if len(face_recognition.face_encodings(np.array(face_image), model='large')) == 0:
+            Image.fromarray(face_image).show()
+
         
-        unknown_face_encoding = face_recognition.face_encodings(np.array(face_image))[0]
+        unknown_face_encoding = face_recognition.face_encodings(np.array(face_image), model='large')[0]
 
         for (name, face_pos) in known_people:
+            print(face_recognition.compare_faces([face_pos], unknown_face_encoding, tolerance=0.5)[0])
             if face_recognition.compare_faces([face_pos], unknown_face_encoding, tolerance=0.5)[0]:
                 ans[name] = (x, y)
                 break
+            else:
+                print("Unknown face")
+
+    print(ans)
     return ans
 
     
