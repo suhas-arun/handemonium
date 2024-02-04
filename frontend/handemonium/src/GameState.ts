@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { useState } from "react";
 
 interface User {
   name: string;
@@ -13,20 +13,24 @@ const initialState: User[] = [
   { name: "Viyan", score: 0 },
 ];
 
-export let UserState = createContext<User[]>(initialState);
+const [users, setUsers] = useState<User[]>(initialState);
 
 export const getLeaderboard = (): User[] => {
-  const users = useContext(UserState);
-  return users.sort((a, b) => b.score - a.score);
+  return [...users].sort((a, b) => b.score - a.score);
 };
 
 export const updateScore = (name: string, score: number): void => {
-  const users = useContext(UserState);
-  const updatedUsers = users.map((user) => {
-    if (user.name === name) {
-      return { ...user, score: user.score + score };
+  setUsers(users => {
+    const index = users.findIndex(user => user.name === name);
+    if (index === -1) {
+      return users;
     }
-    return user;
-  });
-  UserState = createContext<User[]>(updatedUsers);
+
+    const updatedUser = { ...users[index], score: users[index].score + score };
+    return [
+      ...users.slice(0, index),
+      updatedUser,
+      ...users.slice(index + 1),
+    ];
+  })
 };
