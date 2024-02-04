@@ -4,6 +4,7 @@ import QuestionScreen1 from "../../components/QuestionScreen1";
 import QuestionScreen2 from "@/components/QuestionScreen2";
 import { getCorrectAnswer, questions } from "@/questions";
 import AnswerScreen from "@/components/AnswerScreen";
+import Leaderboard from "@/components/Leaderboard";
 
 interface QuizPageProps {}
 
@@ -15,11 +16,10 @@ interface QuizPageState {
 const QuizPage: React.FC<QuizPageProps> = () => {
   const [currentScreen, setCurrentScreen] = useState<
     "question1" | "question2" | "answer" | "leaderboard" | "final"
-  >("answer");
+  >("question1");
   const [questionIndex, setQuestionIndex] = useState<number>(0);
 
   const goToQuestionScreen2 = () => {
-    console.log("DONE");
     setCurrentScreen("question2");
   };
 
@@ -35,10 +35,21 @@ const QuizPage: React.FC<QuizPageProps> = () => {
     }
   };
 
-  // const handleAnswerSubmit = (answer: string) => {
-  //   setQuestionIndex((prevIndex) => prevIndex + 1);
-  //   setCurrentScreen("question1");
-  // };
+  const getLeaderboard = () => {
+    return [
+      { name: "Alex", score: 10 },
+      { name: "Suhas", score: 5 },
+      { name: "Ben", score: 3 },
+      { name: "Sid", score: 2 },
+      { name: "Viyan", score: 1 },
+    ];
+  };
+
+  function nextQuestion() {
+    const newQuestionIndex = questionIndex + 1;
+    setQuestionIndex(newQuestionIndex);
+    setCurrentScreen("question1");
+  }
 
   return (
     <div className="min-h-screen bg-blue-800">
@@ -62,6 +73,9 @@ const QuizPage: React.FC<QuizPageProps> = () => {
           answer={getCorrectAnswer(questions[questionIndex])!}
           onTimerEnd={goToLeaderboard}
         />
+      )}
+      {currentScreen === "leaderboard" && (
+        <Leaderboard leaderboard={getLeaderboard()} onTimerEnd={nextQuestion} />
       )}
     </div>
   );

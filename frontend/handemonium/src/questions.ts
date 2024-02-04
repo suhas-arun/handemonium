@@ -13,6 +13,15 @@ export const questions: QuestionType[] = [
       { text: "Paul Bilokon", isCorrect: false },
     ],
   },
+  {
+    question: "What is the full form of OS?",
+    options: [
+      { text: "Order of Significance", isCorrect: false },
+      { text: "Operating System", isCorrect: true },
+      { text: "Open Software", isCorrect: false },
+      { text: "Optical Sensor", isCorrect: false },
+    ],
+  },
 ];
 
 export function getCorrectAnswer(
