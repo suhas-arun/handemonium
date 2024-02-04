@@ -1,7 +1,7 @@
 import asyncio
 import os
 import io
-from backend.posedetect import PoseDetection
+from posedetect import PoseDetection
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
