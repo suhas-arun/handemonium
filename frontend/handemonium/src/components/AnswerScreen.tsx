@@ -12,14 +12,19 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await captureAndSendImage("http://localhost:8000");
-      const data = await response.json();
-      console.log(response, data);
-      setData(data);
-      setIsLoading(false);
-    }
-  });
+    (async () => {
+      try {
+        const response = await captureAndSendImage("http://localhost:8000");
+        console.log(response);
+        const data = await response.json();
+        console.log(data);
+        setData(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
