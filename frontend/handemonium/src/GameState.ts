@@ -13,9 +13,20 @@ const initialState: User[] = [
   { name: "Viyan", score: 0 },
 ];
 
-export const UserState = createContext<User[]>(initialState);
+export let UserState = createContext<User[]>(initialState);
 
 export const getLeaderboard = (): User[] => {
   const users = useContext(UserState);
   return users.sort((a, b) => b.score - a.score);
+};
+
+export const updateScore = (name: string, score: number): void => {
+  const users = useContext(UserState);
+  const updatedUsers = users.map((user) => {
+    if (user.name === name) {
+      return { ...user, score: user.score + score };
+    }
+    return user;
+  });
+  UserState = createContext<User[]>(updatedUsers);
 };

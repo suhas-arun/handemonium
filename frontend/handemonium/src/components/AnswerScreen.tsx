@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LoadingIcon from "./LoadingIcon";
 import { captureAndSendImage } from "@/utils/ImageCapture";
+import { updateScore } from "@/GameState";
 
 interface AnswerScreenProps {
   answer: [string, number];
@@ -22,6 +23,9 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
       } catch (error) {
         console.error(error);
       }
+      for (let user of data) {
+        updateScore(user.id, user.score);
+      }
       const timer = setInterval(() => {
         setCountdown((prevCountdown) => {
           if (prevCountdown === 1) {
@@ -37,11 +41,6 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!isLoading) {
-
-    }
-  }, [isLoading]);
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
