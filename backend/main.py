@@ -29,7 +29,7 @@ files_path = "../uploads"
 # Ensure the target directory exists
 os.makedirs(files_path, exist_ok=True)
 
-def perform_analysis(image_path: str, model_source: str) -> List[dict]:
+def perform_analysis(image_path: str, model_source: str):
     guesses = {}
     faces = face_to_name(image_path)
     fingers = get_fingers(image_path, model_source)
