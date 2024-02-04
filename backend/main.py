@@ -1,6 +1,7 @@
 import asyncio
 import os
-from fastapi import FastAPI, File, UploadFile
+import io
+from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
@@ -8,7 +9,6 @@ from typing import List
 from facereg import face_reg
 from facereg import nearest_hand
 from gesreg import get_fingers
-
 
 app = FastAPI()
 
@@ -40,7 +40,7 @@ async def get_next_filename() -> str:
     global file_counter
     async with file_counter_lock:
         file_counter += 1
-        return f"file_{file_counter}.jpg"
+        return f"file_{file_counter}.png"
 
 @app.get("/")
 def read_root():
@@ -51,12 +51,17 @@ def read_root():
 async def receive_image(file: UploadFile = File(...)):
     try:
         # Generate a unique filename
+        print("Received image data")
+
         filename = await get_next_filename()
         path_to_file = f"{files_path}/{filename}"
 
-        # Save the received image locally
-        with open(path_to_file, "wb") as buffer:
-            buffer.write(file.file.read())
+        print(f"Saving to {path_to_file}")
+
+        request_object_content = await file.read()
+        img = Image.open(io.BytesIO(request_object_content))
+
+        img.save(path_to_file, "PNG")
 
         # Perform image analysis
         result = perform_analysis(path_to_file)
@@ -68,5 +73,6 @@ async def receive_image(file: UploadFile = File(...)):
         return JSONResponse(content=result)
 
     except Exception as e:
+        print(e)
         # Handle exceptions and return appropriate response
         raise HTTPException(status_code=500, detail=str(e))
