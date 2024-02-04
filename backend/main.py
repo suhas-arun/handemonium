@@ -5,6 +5,10 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from typing import List
+from facereg import face_reg
+from facereg import nearest_face
+from gesreg import get_fingers
+
 
 app = FastAPI()
 
@@ -22,9 +26,15 @@ file_counter = 0
 file_counter_lock = asyncio.Lock()
 files_path = "../uploads"
 
-def perform_analysis(image_path: str) -> List[dict]:
-    # TODO
-    return [{"name": "Alex", "guess": 1}, {"name": "Ben", "guess": 3}]
+def perform_analysis(image_path: str, model_source: str) -> List[dict]:
+    guesses ={}
+    faces = face_reg(image_path)
+    fingers = get_fingers(image_path, model_source)
+    for finger in fingers:
+        face = nearest_face(finger['x'],faces)
+        name = faces[face]
+        guesses[name] = finger['fingers_up']
+    return guesses
 
 async def get_next_filename() -> str:
     global file_counter

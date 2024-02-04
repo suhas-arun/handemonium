@@ -28,5 +28,3 @@ def get_fingers (image_source, model_source):
         })
     
     return fingers
-
-
