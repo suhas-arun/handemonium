@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Timer from "./Timer";
+import Image from "next/image";
 
 interface QuestionScreen2Props {
   questionIndex: number;
@@ -38,8 +39,8 @@ const QuestionScreen2: React.FC<QuestionScreen2Props> = ({
       <Timer countdown={secondsRemaining} />
       <div className="grid grid-cols-2 gap-4 mt-8 mb-8">
         {options.map((option, index) => (
-          <div className="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 h-32">
-            <img src={`/option${index + 1}.png`} className="w-12 h-12" alt={`/option${index + 1}`} />
+          <div key={index} className="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 h-32">
+            <Image src={`/option${index + 1}.png`} className="w-12 h-12" alt={`/option${index + 1}`} />
             <div className="ml-4">
               <p className="text-2xl font-bold text-black">{option.text}</p>
             </div>

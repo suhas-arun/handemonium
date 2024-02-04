@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface LeaderboardProps {
-  leaderboard: { name: string; score: number }[];
+  leaderboard: [string, number][];
   onTimerEnd: () => void;
 }
 

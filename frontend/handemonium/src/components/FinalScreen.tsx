@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 interface FinalScreenProps {
-  leaderboard: { name: string; score: number }[];
+  leaderboard: [string, number][];
 }
 
 const FinalScreen: React.FC<FinalScreenProps> = ({ leaderboard }) => {
