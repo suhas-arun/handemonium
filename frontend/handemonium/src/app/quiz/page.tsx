@@ -1,11 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import QuestionScreen1 from "../../components/QuestionScreen1";
 import QuestionScreen2 from "@/components/QuestionScreen2";
 import { getCorrectAnswer, questions } from "@/questions";
 import AnswerScreen from "@/components/AnswerScreen";
 import Leaderboard from "@/components/Leaderboard";
 import FinalScreen from "@/components/FinalScreen";
+import { getLeaderboard } from "../../GameState";
 
 interface QuizPageProps {}
 
@@ -34,16 +35,6 @@ const QuizPage: React.FC<QuizPageProps> = () => {
     } else {
       setCurrentScreen("leaderboard");
     }
-  };
-
-  const getLeaderboard = () => {
-    return [
-      { name: "Alex", score: 10 },
-      { name: "Suhas", score: 5 },
-      { name: "Ben", score: 3 },
-      { name: "Sid", score: 2 },
-      { name: "Viyan", score: 1 },
-    ];
   };
 
   function nextQuestion() {
