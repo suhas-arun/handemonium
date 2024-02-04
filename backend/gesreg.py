@@ -1,12 +1,20 @@
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from mediapipe.tasks.python.components.processors import ClassifierOptions
 
 def get_fingers (image_source, model_source):
 
     base_options = python.BaseOptions(model_asset_path=model_source)
-    options = vision.GestureRecognizerOptions(base_options=base_options, num_hands=5, min_hand_detection_confidence=0.4, category_allowlist=['1', '2', '3', '4'])
+    custom_gesture_classifier_options = ClassifierOptions(
+        max_results=5, 
+        score_threshold=0.2, 
+        category_allowlist=["1", "2", "3", "4"],  
+        category_denylist=[''],
+    )
+    options = vision.GestureRecognizerOptions(base_options=base_options, num_hands=5, custom_gesture_classifier_options=custom_gesture_classifier_options)
     recognizer = vision.GestureRecognizer.create_from_options(options)
+    
 
     image = mp.Image.create_from_file(image_source)
     
