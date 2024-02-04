@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 interface FinalScreenProps {
-  leaderboard: { name: string; score: number }[];
+  leaderboard: [string, number][];
 }
 
 const FinalScreen: React.FC<FinalScreenProps> = ({ leaderboard }) => {
@@ -15,7 +15,7 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ leaderboard }) => {
         <FontAwesomeIcon icon={faHome} />
       </button>
       <div className="bg-blue-800 flex justify-between items-center">
-        <h1 className="text-6xl font-bold mb-8">Final Leaderboard</h1>
+        <h1 className="text-6xl font-bold mt-4 mb-8">Final Leaderboard</h1>
       </div>
       <div className="flex flex-col items-center mb-8">
         {leaderboard.map(([name, score], index) => (

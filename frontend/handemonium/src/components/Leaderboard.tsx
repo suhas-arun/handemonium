@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface LeaderboardProps {
-  leaderboard: { name: string; score: number }[];
+  leaderboard: [string, number][];
   onTimerEnd: () => void;
 }
 
@@ -28,7 +28,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
-      <h1 className="text-6xl font-bold mb-8">Current Leaderboard</h1>
+      <h1 className="text-6xl font-bold mt-4 mb-8">Current Leaderboard</h1>
       <div className="flex flex-col items-center mb-8">
         {leaderboard.map(([name, score], index) => (
           <div

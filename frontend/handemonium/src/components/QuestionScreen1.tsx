@@ -27,7 +27,7 @@ const QuestionScreen1: React.FC<QuestionScreen1Props> = ({
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  });
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">

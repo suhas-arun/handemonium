@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LoadingIcon from "./LoadingIcon";
 import { captureAndSendImage } from "@/utils/ImageCapture";
 import GameState from "@/GameState";
+import Image from "next/image";
 
 interface AnswerScreenProps {
   answer: [string, number];
@@ -40,15 +41,16 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd, gameSta
         clearInterval(timer);
       };
     })();
-  }, []);
+  });
 
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
+      {isLoading && <h2 className="text-2xl font-bold mb-10">Keep your hands up!</h2>}
       <h1 className="text-6xl font-bold mb-8">The correct answer was:</h1>
       {!isLoading && (
         <div className="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 h-32 mt-8">
-          <img
+          <Image
             src={`/option${answer[1] + 1}.png`}
             className="w-12 h-12"
             alt={`/option${answer[1] + 1}`}
