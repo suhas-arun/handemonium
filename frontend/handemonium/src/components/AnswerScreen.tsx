@@ -8,6 +8,7 @@ interface AnswerScreenProps {
 }
 
 const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
+  const [countdown, setCountdown] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
@@ -21,8 +22,26 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
       } catch (error) {
         console.error(error);
       }
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown === 1) {
+            onTimerEnd();
+            clearInterval(timer);
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+      return () => {
+        clearInterval(timer);
+      };
     })();
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+
+    }
+  }, [isLoading]);
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
