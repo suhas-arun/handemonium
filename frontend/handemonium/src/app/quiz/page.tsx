@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import QuestionScreen1 from "../../components/QuestionScreen1";
+import QuestionScreen2 from "@/components/QuestionScreen2";
 import { questions } from "@/questions";
 
 interface QuizPageProps {}
@@ -21,9 +22,9 @@ const QuizPage: React.FC<QuizPageProps> = () => {
     setCurrentScreen("question2");
   };
 
-  // const goToAnswer = () => {
-  //   setCurrentScreen("answer");
-  // };
+  const goToAnswer = () => {
+    setCurrentScreen("answer");
+  };
 
   // const goToLeaderboard = () => {
   //   if (questionIndex === questions.length - 1) {
@@ -39,12 +40,20 @@ const QuizPage: React.FC<QuizPageProps> = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-blue-800">
       {currentScreen === "question1" && (
         <QuestionScreen1
           questionIndex={questionIndex}
           questionText={questions[questionIndex].question}
           onTimerEnd={goToQuestionScreen2}
+        />
+      )}
+      {currentScreen === "question2" && (
+        <QuestionScreen2
+          questionIndex={questionIndex}
+          questionText={questions[questionIndex].question}
+          options={questions[questionIndex].options}
+          onTimerEnd={goToAnswer}
         />
       )}
       {/* {currentScreen === "answer" && (
