@@ -1,6 +1,7 @@
 import asyncio
 import os
 import io
+from backend.posedetect import PoseDetection
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,11 +33,16 @@ os.makedirs(files_path, exist_ok=True)
 def perform_analysis(image_path: str, model_source: str):
     guesses = {}
     faces = face_to_name(image_path)
-    fingers = get_fingers(image_path, model_source)
+
+    poseDetect = PoseDetection(image_path)
+
+    # dictionary of face positions and their hand image
     for name, face_coords in faces.items():
-        answer = nearest_hand(face_coords[0], face_coords[1], fingers)
-        guesses[name] = answer
-    print(guesses)
+        closest_hand_img = poseDetect.find_closest_hand(face_coords)
+        Image.fromarray(closest_hand_img).show()
+
+        guesses[name] = get_fingers(closest_hand_img, model_source)["fingers_up"]
+
     return guesses
 
 async def get_next_filename() -> str:
