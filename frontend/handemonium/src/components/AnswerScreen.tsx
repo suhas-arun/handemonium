@@ -23,8 +23,8 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd }) => {
       } catch (error) {
         console.error(error);
       }
-      for (let user of data) {
-        updateScore(user.id, user.score);
+      for (const user in data) {
+        updateScore(user, data[user]);
       }
       const timer = setInterval(() => {
         setCountdown((prevCountdown) => {
