@@ -2,14 +2,14 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
+
 def get_fingers (image_source, model_source):
 
     base_options = python.BaseOptions(model_asset_path=model_source)
-    options = vision.GestureRecognizerOptions(base_options=base_options, num_hands=5)
+    options = vision.GestureRecognizerOptions(base_options=base_options, num_hands=1)
     recognizer = vision.GestureRecognizer.create_from_options(options)
 
     image = mp.Image.create_from_file(image_source)
-    
     recognition_result = recognizer.recognize(image)
 
     top_gesture = recognition_result.gestures

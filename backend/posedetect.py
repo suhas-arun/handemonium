@@ -56,10 +56,10 @@ class PoseDetection():
 
 
     # Helper functions
-    def find_center(x1, y1, x2, y2):
+    def find_center(self, x1, y1, x2, y2):
         return (x1 + x2) / 2, (y1 + y2) / 2
 
-    def calculate_distance(p1, p2):
+    def calculate_distance(self, p1, p2):
         return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
 
@@ -89,8 +89,8 @@ class PoseDetection():
 
 
     def crop_hand_from_image(self, image, closest_hand):
-        box_size = 70
-        vertical_offset = 35
+        box_size = 100
+        vertical_offset = 40
 
         x1 = int(max(0, closest_hand[0] - box_size))
         y1 = int(max(0, closest_hand[1] - box_size - vertical_offset))
@@ -143,7 +143,7 @@ class PoseDetection():
         min_distance = float('inf')
 
         for pose_landmarks in pose_landmarks:
-            nose_landmark = pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE]
+            nose_landmark = pose_landmarks[self.mp_pose.PoseLandmark.NOSE]
             nose_position = (nose_landmark.x * self.iw, nose_landmark.y * self.ih)
 
             distance = self.calculate_distance(face_position, nose_position)

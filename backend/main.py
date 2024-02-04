@@ -7,9 +7,10 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from facereg import face_to_name
-from facereg import nearest_hand
 from gesreg import get_fingers
 from PIL import Image
+
+import cv2
 
 app = FastAPI()
 
@@ -39,9 +40,9 @@ def perform_analysis(image_path: str, model_source: str):
     # dictionary of face positions and their hand image
     for name, face_coords in faces.items():
         closest_hand_img = poseDetect.find_closest_hand(face_coords)
-        Image.fromarray(closest_hand_img).show()
-
-        guesses[name] = get_fingers(closest_hand_img, model_source)["fingers_up"]
+        cv2.imwrite('tmp_output/closest_hand.jpeg', cv2.cvtColor(closest_hand_img, cv2.COLOR_RGB2BGR))
+        
+        guesses[name] = get_fingers("tmp_output/closest_hand.jpeg", model_source)[0]["fingers_up"]
 
     return guesses
 
