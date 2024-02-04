@@ -8,7 +8,6 @@ export default function Home() {
       <div className="flex gap-4 mt-8">
         <Button label="PLAY" redirectUrl="/quiz" />
         <Button label="SETTINGS" />
-        <Button label="TEST" redirectUrl="test" />
       </div>
     </div>
   );
