@@ -5,7 +5,9 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
-from typing import List
+from facereg import face_to_name
+from facereg import nearest_hand
+from gesreg import get_fingers
 from PIL import Image
 
 app = FastAPI()
@@ -27,9 +29,15 @@ files_path = "../uploads"
 # Ensure the target directory exists
 os.makedirs(files_path, exist_ok=True)
 
-def perform_analysis(image_path: str) -> List[dict]:
-    # TODO
-    return [{"name": "Alex", "guess": 1}, {"name": "Ben", "guess": 3}]
+def perform_analysis(image_path: str, model_source: str):
+    guesses = {}
+    faces = face_to_name(image_path)
+    fingers = get_fingers(image_path, model_source)
+    for name, face_coords in faces.items():
+        answer = nearest_hand(face_coords[0], face_coords[1], fingers)
+        guesses[name] = answer
+    print(guesses)
+    return guesses
 
 async def get_next_filename() -> str:
     global file_counter
@@ -57,11 +65,17 @@ async def receive_image(file: UploadFile = File(...)):
 
         img.save(path_to_file, "PNG")
 
+        print(f"Saved to {path_to_file}")
+
         # Perform image analysis
-        result = perform_analysis(path_to_file)
+        result = perform_analysis(path_to_file, "Models/gesture_recognizer-7.task")
+
+        print(f"Performed analysis")
 
         # Delete the file after analysis
         os.remove(path_to_file)
+
+        print(f"Removed file")
 
         # Return the result as JSON
         return JSONResponse(content=result)
