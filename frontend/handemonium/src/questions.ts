@@ -39,7 +39,7 @@ export const questions: QuestionType[] = [
       { text: "Home Tool Markup Language", isCorrect: false },
       { text: "Hyper Tool Markup Language", isCorrect: false },
     ]
-  }
+  },
   {
     question: "What does RISC stand for?",
     options: [
