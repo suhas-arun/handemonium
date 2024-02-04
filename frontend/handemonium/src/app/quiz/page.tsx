@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import QuestionScreen1 from "../../components/QuestionScreen1";
 import QuestionScreen2 from "@/components/QuestionScreen2";
-import { questions } from "@/questions";
+import { getCorrectAnswer, questions } from "@/questions";
+import AnswerScreen from "@/components/AnswerScreen";
 
 interface QuizPageProps {}
 
@@ -14,7 +15,7 @@ interface QuizPageState {
 const QuizPage: React.FC<QuizPageProps> = () => {
   const [currentScreen, setCurrentScreen] = useState<
     "question1" | "question2" | "answer" | "leaderboard" | "final"
-  >("question1");
+  >("answer");
   const [questionIndex, setQuestionIndex] = useState<number>(0);
 
   const goToQuestionScreen2 = () => {
@@ -26,13 +27,13 @@ const QuizPage: React.FC<QuizPageProps> = () => {
     setCurrentScreen("answer");
   };
 
-  // const goToLeaderboard = () => {
-  //   if (questionIndex === questions.length - 1) {
-  //     setCurrentScreen("final");
-  //   } else {
-  //     setCurrentScreen("leaderboard");
-  //   }
-  // };
+  const goToLeaderboard = () => {
+    if (questionIndex === questions.length - 1) {
+      setCurrentScreen("final");
+    } else {
+      setCurrentScreen("leaderboard");
+    }
+  };
 
   // const handleAnswerSubmit = (answer: string) => {
   //   setQuestionIndex((prevIndex) => prevIndex + 1);
@@ -56,12 +57,12 @@ const QuizPage: React.FC<QuizPageProps> = () => {
           onTimerEnd={goToAnswer}
         />
       )}
-      {/* {currentScreen === "answer" && (
-        <QuestionScreen2
-          question={questions[questionIndex]}
-          onSubmit={handleAnswerSubmit}
+      {currentScreen === "answer" && (
+        <AnswerScreen
+          answer={getCorrectAnswer(questions[questionIndex])!}
+          onTimerEnd={goToLeaderboard}
         />
-      )} */}
+      )}
     </div>
   );
 };

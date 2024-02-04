@@ -1,7 +1,9 @@
-export const questions: {
+export type QuestionType = {
   question: string;
   options: { text: string; isCorrect: boolean }[];
-}[] = [
+};
+
+export const questions: QuestionType[] = [
   {
     question: "Who invented the Banker's algorithm?",
     options: [
@@ -12,3 +14,14 @@ export const questions: {
     ],
   },
 ];
+
+export function getCorrectAnswer(
+  question: QuestionType
+): [string, number] | null {
+  for (const [optionIndex, option] of question.options.entries()) {
+    if (option.isCorrect) {
+      return [option.text, optionIndex];
+    }
+  }
+  return null;
+}
