@@ -50,21 +50,8 @@ export const captureAndSendImage = async (backendIp: string): Promise<any> => {
               reject(error);
             });
         };
-
-        console.log("About to capture");
         // Delay the image capture by 1 second to allow video to stabilize
-
         return setTimeout(captureImage, 1000);
-        // return new Promise((resolve, reject) => {
-        //   return setTimeout(() => {
-        //     const image = captureImage;
-        //     if (image) {
-        //       resolve(image);
-        //     } else {
-        //       reject(new Error("Failed to capture image."));
-        //     }
-        //   }, 1000);
-        // });
       });
     });
   } catch (error) {

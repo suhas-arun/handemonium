@@ -15,14 +15,12 @@ interface QuizPageState {
   questionIndex: number;
 }
 
-
 const QuizPage: React.FC<QuizPageProps> = () => {
   const [currentScreen, setCurrentScreen] = useState<
     "question1" | "question2" | "answer" | "leaderboard" | "final"
   >("question1");
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [gameState, setGameState] = useState(new GameState());
-
 
   const goToQuestionScreen2 = () => {
     setCurrentScreen("question2");
@@ -71,7 +69,10 @@ const QuizPage: React.FC<QuizPageProps> = () => {
         />
       )}
       {currentScreen === "leaderboard" && (
-        <Leaderboard leaderboard={gameState.getLeaderboard()} onTimerEnd={nextQuestion} />
+        <Leaderboard
+          leaderboard={gameState.getLeaderboard()}
+          onTimerEnd={nextQuestion}
+        />
       )}
       {currentScreen === "final" && (
         <FinalScreen leaderboard={gameState.getLeaderboard()} />
