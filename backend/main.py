@@ -5,8 +5,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
-from typing import List
-from facereg import face_reg
+from facereg import face_to_name
 from facereg import nearest_hand
 from gesreg import get_fingers
 from PIL import Image
@@ -32,7 +31,7 @@ os.makedirs(files_path, exist_ok=True)
 
 def perform_analysis(image_path: str, model_source: str) -> List[dict]:
     guesses = {}
-    faces = face_reg(image_path)
+    faces = face_to_name(image_path)
     fingers = get_fingers(image_path, model_source)
     for name, face_coords in faces.items():
         answer = nearest_hand(face_coords[0], face_coords[1], fingers)

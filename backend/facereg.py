@@ -1,21 +1,38 @@
 from PIL import Image
 import face_recognition
 import sys
+import math
+import numpy as np
+from operator import itemgetter
+import pandas as pd
 
-# Load the jpg file into a numpy array
-def face_reg(image_path):
-    image = face_recognition.load_image_file(image_path)
-    face_locations = face_recognition.face_locations(image)
-    sorted_face_locations = sorted(face_locations, key=lambda x: x[1] - x[3])
-    names = ['Ben']
-    faces = {}
-    for i, face_location in enumerate(sorted_face_locations):
-        top, right, bottom, left = face_location
+def face_to_name(image_path):
+    unknown_image = face_recognition.load_image_file(image_path)
+
+    ans = {}
+    known_people = []
+    data = pd.read_csv('data/students.csv').values
+    for d in data:
+        my_face_loaded = face_recognition.load_image_file('data/' + d[1])
+        my_face_encoding = face_recognition.face_encodings(my_face_loaded)[0]
+        known_people.append((d[0], my_face_encoding))
+
+    face_locations = face_recognition.face_locations(unknown_image)
+
+    for face in face_locations:
+        top, right, bottom, left = face
+        face_image = unknown_image[top:bottom, left:right]
+
         y = (top+bottom)/2
         x = (right+left)/2
-        faces[names[i]] = (x, y)
-    print(faces)
-    return faces
+        
+        unknown_face_encoding = face_recognition.face_encodings(np.array(face_image))[0]
+
+        for (name, face_pos) in known_people:
+            if face_recognition.compare_faces([face_pos], unknown_face_encoding, tolerance=0.5)[0]:
+                ans[name] = (x, y)
+                break
+    return ans
 
     
 def nearest_hand(facex, facey, hands):
