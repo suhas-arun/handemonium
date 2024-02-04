@@ -89,7 +89,7 @@ class PoseDetection():
 
 
     def crop_hand_from_image(self, image, closest_hand):
-        box_size = 100
+        box_size = 300
         vertical_offset = 40
 
         x1 = int(max(0, closest_hand[0] - box_size))
