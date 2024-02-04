@@ -1,7 +1,7 @@
 // Capture and send image to backend
 export const captureAndSendImage = async (
   backendIp: string
-): Promise<any[]> => {
+): Promise<any> => {
   try {
     // Get media stream from user's camera
     const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -54,7 +54,12 @@ export const captureAndSendImage = async (
         };
 
         // Delay the image capture by 1 second to allow video to stabilize
-        setTimeout(captureImage, 1000);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const image = captureImage;
+            resolve(image);
+          }, 1000);
+        });
       });
     });
   } catch (error) {
