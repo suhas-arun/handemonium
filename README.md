@@ -1,6 +1,10 @@
-# Handemonium
+<h3 align="center">
+<img width="200" src="frontend/handemonium/public/handemonium-logo.png" alt="Phab Pharmacy"/>
+<br>
 Overall Winning submission for IC Hack 24 - Best EdTech Solution sponsored by Marshall Wace \
 DevPost Link - https://devpost.com/software/handemonium
+</h3>
+
 
 ## Try it yourself
 Clone the repository then:
