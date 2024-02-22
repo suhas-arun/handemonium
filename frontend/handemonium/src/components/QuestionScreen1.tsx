@@ -31,7 +31,7 @@ const QuestionScreen1: React.FC<QuestionScreen1Props> = ({
 
   return (
     <div className="bg-blue-800 flex flex-col items-center justify-center h-screen">
-      <h1 className="text-6xl font-bold mb-8">Question {questionIndex + 1}</h1>
+      <h1 className="text-6xl font-bold text-white mb-8">Question {questionIndex + 1}</h1>
       <p className="text-4xl text-white mb-8">{questionText}</p>
       <Timer countdown={countdown} />
     </div>

@@ -32,7 +32,7 @@ const QuestionScreen2: React.FC<QuestionScreen2Props> = ({
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-blue-800">
       <div className="flex items-center justify-center py-4 px-6 bg-blue-800 border-b border-gray-200">
-        <h1 className="text-4xl mt-4 font-semibold">
+        <h1 className="text-4xl mt-4 font-semibold text-white">
           {questionIndex + 1}. {questionText}
         </h1>
       </div>

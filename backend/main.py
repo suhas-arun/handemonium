@@ -9,6 +9,8 @@ from facereg import face_to_name
 from facereg import nearest_hand
 from gesreg import get_fingers
 from PIL import Image
+import cv2
+from posedetect import PoseDetection
 
 app = FastAPI()
 
@@ -29,15 +31,40 @@ files_path = "../uploads"
 # Ensure the target directory exists
 os.makedirs(files_path, exist_ok=True)
 
-def perform_analysis(image_path: str, model_source: str):
+
+# For use of pose detection as instead of euclidean distance
+def perform_analysis(image_path: str, model_source: str) -> dict:
     guesses = {}
     faces = face_to_name(image_path)
+
+    poseDetect = PoseDetection(image_path)
+
+    # dictionary of face positions and their hand image
+    for name, face_coords in faces.items():
+        closest_hand_img = poseDetect.find_closest_hand(face_coords)
+        cv2.imwrite('tmp_output/closest_hand.jpeg', cv2.cvtColor(closest_hand_img, cv2.COLOR_RGB2BGR))
+        
+        guesses[name] = get_fingers("tmp_output/closest_hand.jpeg", model_source)[0]["fingers_up"]
+    print(guesses)
+    return guesses
+
+# Use of euclidean distance
+def perform_analysis(image_path: str, model_source: str) -> dict:
+    guesses = {}
+
+    # Get Faces
+    faces = face_to_name(image_path)
+
+    # Get Fingers
     fingers = get_fingers(image_path, model_source)
+
+    # Match Faces to Nearest Fingers
     for name, face_coords in faces.items():
         answer = nearest_hand(face_coords[0], face_coords[1], fingers)
         guesses[name] = answer
     print(guesses)
     return guesses
+
 
 async def get_next_filename() -> str:
     global file_counter
@@ -47,6 +74,10 @@ async def get_next_filename() -> str:
 
 @app.get("/")
 def read_root():
+    perform_analysis("Upload/banker.jpeg", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/Sid.JPG", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/SV.jpeg", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/Test2.jpeg", "Models/gesture_recognizer-11.task")
     return {"Hello": "World"}
 
 @app.post("/scan")
@@ -68,7 +99,7 @@ async def receive_image(file: UploadFile = File(...)):
         print(f"Saved to {path_to_file}")
 
         # Perform image analysis
-        result = perform_analysis(path_to_file, "Models/gesture_recognizer-7.task")
+        result = perform_analysis(path_to_file, "Models/gesture_recognizer-11.task")
 
         print(f"Performed analysis")
 
