@@ -79,12 +79,9 @@ class PoseDetection():
 
 
         # Perform Pose Detection
-        with vision.PoseLandmarker.create_from_options(options) as landmarker:
-            mp_image = mp.Image(
-                image_format=mp.ImageFormat.SRGB,
-                data=self.rgb_image)
-
-            return landmarker.detect(mp_image)
+        landmarker = vision.PoseLandmarker.create_from_options(options)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=self.rgb_image)
+        return landmarker.detect(mp_image)
 
 
 
@@ -119,7 +116,7 @@ class PoseDetection():
         if not face_landmark:
             return  # No visible face landmark found in this pose
 
-        # Find the closest wrist within the same pose
+        # Find the closest wrist within the same pose, selecting for the closest hand to face 
         closest_hand = None
         min_distance = float('inf')
 

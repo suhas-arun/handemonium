@@ -41,7 +41,7 @@ const AnswerScreen: React.FC<AnswerScreenProps> = ({ answer, onTimerEnd, gameSta
         clearInterval(timer);
       };
     })();
-  });
+  }, []);
 
 
   return (

@@ -7,7 +7,6 @@ def get_fingers(image_source: str, model_source: str) -> list:
     # Create a gesture recognizer
     base_options = python.BaseOptions(model_asset_path=model_source)
     custom_gesture_classifier_options = ClassifierOptions(
-        max_results=5, 
         score_threshold=0.2, 
         category_allowlist=["1", "2", "3", "4"],  
         category_denylist=[''],
@@ -28,7 +27,6 @@ def get_fingers(image_source: str, model_source: str) -> list:
     # Extract the fingers and locations
     fingers = []
     for i, hands in enumerate(hand_landmarks):
-
         fingers.append({
             'fingers_up': top_gesture[i][0].category_name,
             'confidence': top_gesture[i][0].score,

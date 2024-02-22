@@ -9,7 +9,7 @@ import pandas as pd
 def face_to_name(image_path: str) -> dict:
     # Load the image for faces to be recognized
     unknown_image = face_recognition.load_image_file(image_path)
-    ans = {}
+    located_people = {}
 
     # Load the known faces 
     known_people = []
@@ -36,13 +36,11 @@ def face_to_name(image_path: str) -> dict:
         unknown_face_encoding = face_recognition.face_encodings(np.array(face_image), model='large')[0]
 
         # Compare the unknown face with the known faces
-        for (name, face_pos) in known_people:
-            if face_recognition.compare_faces([face_pos], unknown_face_encoding, tolerance=0.5)[0]:
-                ans[name] = (x, y)
+        for (name, face) in known_people:
+            if face_recognition.compare_faces([face], unknown_face_encoding, tolerance=0.5)[0]:
+                located_people[name] = (x, y)
                 break
-            else:
-                print("Unknown face")
-    return ans
+    return located_people
 
     
 def nearest_hand(facex: int, facey: int, hands):

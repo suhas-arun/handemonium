@@ -9,6 +9,8 @@ from facereg import face_to_name
 from facereg import nearest_hand
 from gesreg import get_fingers
 from PIL import Image
+import cv2
+from posedetect import PoseDetection
 
 app = FastAPI()
 
@@ -31,8 +33,7 @@ os.makedirs(files_path, exist_ok=True)
 
 
 # For use of pose detection as instead of euclidean distance
-'''
-def perform_analysis(image_path: str, model_source: str):
+def perform_analysis(image_path: str, model_source: str) -> dict:
     guesses = {}
     faces = face_to_name(image_path)
 
@@ -44,10 +45,10 @@ def perform_analysis(image_path: str, model_source: str):
         cv2.imwrite('tmp_output/closest_hand.jpeg', cv2.cvtColor(closest_hand_img, cv2.COLOR_RGB2BGR))
         
         guesses[name] = get_fingers("tmp_output/closest_hand.jpeg", model_source)[0]["fingers_up"]
-
+    print(guesses)
     return guesses
-'''
 
+# Use of euclidean distance
 def perform_analysis(image_path: str, model_source: str) -> dict:
     guesses = {}
 
@@ -64,6 +65,7 @@ def perform_analysis(image_path: str, model_source: str) -> dict:
     print(guesses)
     return guesses
 
+
 async def get_next_filename() -> str:
     global file_counter
     async with file_counter_lock:
@@ -72,6 +74,10 @@ async def get_next_filename() -> str:
 
 @app.get("/")
 def read_root():
+    perform_analysis("Upload/banker.jpeg", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/Sid.JPG", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/SV.jpeg", "Models/gesture_recognizer-11.task")
+    perform_analysis("Upload/Test2.jpeg", "Models/gesture_recognizer-11.task")
     return {"Hello": "World"}
 
 @app.post("/scan")
